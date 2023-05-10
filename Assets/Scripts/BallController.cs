@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BallController : MonoBehaviour
 {
@@ -11,12 +13,17 @@ public class BallController : MonoBehaviour
     string currentColor;
     public Color ballColor;
     public Color turkuaz, sari, mor, pembe;
+
+    [SerializeField] Text scoreText;
+    int score;
+    [SerializeField] GameObject halka, renkTekeri;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
     void Start()
     {
+        scoreText.text = "Score:" + score;
         RandomColor();
     }
     void Update()
@@ -39,7 +46,25 @@ public class BallController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.tag);
+        if (collision.tag == "RenkTekeri")
+        {
+            RandomColor();
+            Destroy(collision.gameObject);
+            return;
+        }
+        if (collision.tag != currentColor && collision.tag != "PointInc" && collision.tag != "RenkTekeri")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        if (collision.tag == "PointInc")
+        {
+            score += 5;
+            scoreText.text = "Score: " + score;
+            Destroy(collision.gameObject);
+
+            Instantiate(halka, new Vector3(transform.position.x, transform.position.y + 8, transform.position.z), Quaternion.identity);
+            Instantiate(renkTekeri, new Vector3(transform.position.x, transform.position.y + 8, transform.position.z), Quaternion.identity);
+        }
     }
     void RandomColor()
     {
