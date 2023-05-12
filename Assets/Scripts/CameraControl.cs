@@ -8,7 +8,7 @@ public class CameraControl : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (ball.transform.position.y > transform.position.y)
+        if (ball != null && ball.transform.position.y > transform.position.y)
         {
             transform.position = new Vector3(transform.position.x, ball.transform.position.y, transform.position.z);
         }

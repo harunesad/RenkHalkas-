@@ -14,7 +14,9 @@ public class BallController : MonoBehaviour
     public Color ballColor;
     public Color turkuaz, sari, mor, pembe;
 
-    [SerializeField] Text scoreText;
+    [SerializeField] Text scoreText, bestScoreText;
+    public Button tapToPlay, help;
+    public GameObject helpPanel;
     int score;
     [SerializeField] GameObject halka, renkTekeri;
     private void Awake()
@@ -23,11 +25,20 @@ public class BallController : MonoBehaviour
     }
     void Start()
     {
-        scoreText.text = "Score:" + score;
+        tapToPlay.onClick.AddListener(TapToPlay);
+        help.onClick.AddListener(HelpOpen);
+        Time.timeScale = 0;
+        scoreText.text = "Score: " + score;
+        bestScoreText.text = "BestScore: " + PlayerPrefs.GetInt("BestScore");
         RandomColor();
     }
     void Update()
     {
+        if (Camera.main.transform.position.y - 5 > transform.position.y)
+        {
+            Destroy(gameObject);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         if (Input.GetMouseButtonDown(0))
         {
             isClick = true;
@@ -60,6 +71,7 @@ public class BallController : MonoBehaviour
         {
             score += 5;
             scoreText.text = "Score: " + score;
+            PlayerPrefs.SetInt("BestScore", score);
             Destroy(collision.gameObject);
 
             Instantiate(halka, new Vector3(transform.position.x, transform.position.y + 8, transform.position.z), Quaternion.identity);
@@ -92,6 +104,15 @@ public class BallController : MonoBehaviour
         }
 
         GetComponent<SpriteRenderer>().color = ballColor;
-        Debug.Log(random);
+    }
+    void TapToPlay()
+    {
+        tapToPlay.gameObject.SetActive(false);
+        help.gameObject.SetActive(false);
+        Time.timeScale = 1;
+    }
+    void HelpOpen()
+    {
+        helpPanel.SetActive(!helpPanel.activeSelf);
     }
 }
