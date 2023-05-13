@@ -75,7 +75,7 @@ public class BallController : MonoBehaviour
             Destroy(collision.gameObject);
 
             Instantiate(halka, new Vector3(transform.position.x, transform.position.y + 8, transform.position.z), Quaternion.identity);
-            Instantiate(renkTekeri, new Vector3(transform.position.x, transform.position.y + 8, transform.position.z), Quaternion.identity);
+            Instantiate(renkTekeri, new Vector3(transform.position.x, transform.position.y + 11, transform.position.z), Quaternion.identity);
         }
     }
     void RandomColor()
